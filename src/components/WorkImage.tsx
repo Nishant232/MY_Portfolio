@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { MdArrowOutward } from "react-icons/md";
+import { FaGithub } from "react-icons/fa";
 
 interface Props {
   image: string;
   alt?: string;
   video?: string;
   link?: string;
+  github?: string;
 }
 
 const WorkImage = (props: Props) => {
@@ -21,19 +23,23 @@ const WorkImage = (props: Props) => {
     }
   };
 
+  // Determine which link to use: GitHub if available, otherwise live link
+  const primaryLink = props.github || props.link;
+  const linkIcon = props.github ? <FaGithub /> : <MdArrowOutward />;
+
   return (
     <div className="work-image">
       <a
         className="work-image-in"
-        href={props.link}
+        href={primaryLink}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setIsVideo(false)}
         target="_blank"
         data-cursor={"disable"}
       >
-        {props.link && (
+        {primaryLink && (
           <div className="work-link">
-            <MdArrowOutward />
+            {linkIcon}
           </div>
         )}
         <img src={props.image} alt={props.alt} />

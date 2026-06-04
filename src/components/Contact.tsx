@@ -10,21 +10,21 @@ const Contact = () => {
           <div className="contact-box">
             <h4>Email</h4>
             <p>
-              <a href="mailto:example@mail.com" data-cursor="disable">
-                example@mail.com
+              <a href="mailto:nishant75971@mail.com" data-cursor="disable">
+                nishant75971@mail.com
               </a>
             </p>
             <h4>Phone</h4>
             <p>
-              <a href="tel:+9199999999" data-cursor="disable">
-                +91 99999 99999
+              <a href="tel:+917827177597" data-cursor="disable">
+                +91 78271 77597
               </a>
             </p>
           </div>
           <div className="contact-box">
             <h4>Social</h4>
             <a
-              href="https://github.com"
+              href="https://github.com/Nishant232"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
@@ -32,36 +32,36 @@ const Contact = () => {
               Github <MdArrowOutward />
             </a>
             <a
-              href="https://www.linkedin.com"
+              href="https://linkedin.com/in/2005nishant"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
             >
               Linkedin <MdArrowOutward />
             </a>
-            <a
+            {/* <a
               href="https://x.com"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
             >
               Twitter <MdArrowOutward />
-            </a>
-            <a
+            </a> */}
+            {/* <a
               href="https://www.instagram.com"
               target="_blank"
               data-cursor="disable"
               className="contact-social"
             >
               Instagram <MdArrowOutward />
-            </a>
+            </a> */}
           </div>
           <div className="contact-box">
             <h2>
-              Designed and Developed <br /> by <span>Moncy Yohannan</span>
+              FullStack Developer <br /> by <span>Nishant</span>
             </h2>
             <h5>
-              <MdCopyright /> 2024
+              <MdCopyright /> 2025
             </h5>
           </div>
         </div>
