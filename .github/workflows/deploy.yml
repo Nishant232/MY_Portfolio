@@ -25,28 +25,40 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Add HF Space config to dist
-        run: |
-          cat > dist/README.md << 'EOF'
-          ---
-          title: Portfolio
-          emoji: 💼
-          colorFrom: indigo
-          colorTo: blue
-          sdk: static
-          pinned: false
-          ---
-          EOF
-
-      - name: Push to Hugging Face Spaces
+      - name: Deploy to Hugging Face Spaces
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          cd dist
-          git init
-          git config user.email "github-actions@github.com"
-          git config user.name "GitHub Actions"
-          git add .
-          git commit -m "Deploy portfolio"
-          git branch -M main
-          git push --force https://Nishant00:${HF_TOKEN}@huggingface.co/spaces/Nishant00/portfolio HEAD:main
+          pip install huggingface_hub --quiet
+          python3 << 'PYEOF'
+          import os, sys
+          from huggingface_hub import HfApi
+
+          token = os.environ.get("HF_TOKEN", "")
+          if not token:
+              print("ERROR: HF_TOKEN secret is not set.")
+              print("Go to: GitHub repo > Settings > Secrets and variables > Actions > New repository secret")
+              print("Name: HF_TOKEN  |  Value: your HuggingFace write token")
+              sys.exit(1)
+
+          api = HfApi(token=token)
+
+          print("Step 1/2 — Creating Space if it does not exist...")
+          api.create_repo(
+              repo_id="Nishant00/portfolio",
+              repo_type="space",
+              space_sdk="static",
+              exist_ok=True,
+              private=False,
+          )
+
+          print("Step 2/2 — Uploading build files...")
+          api.upload_folder(
+              folder_path="dist",
+              repo_id="Nishant00/portfolio",
+              repo_type="space",
+          )
+
+          print("")
+          print("Deployed! Live at: https://nishant00-portfolio.hf.space")
+          PYEOF
