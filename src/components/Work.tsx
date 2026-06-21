@@ -26,6 +26,26 @@ const projects: Project[] = [
   },
   {
     id: 2,
+    title: "HireFlow",
+    category: "AI-Powered Full-Stack Platform",
+    techs: "React, TypeScript, Node.js, Express, MongoDB, OpenRouter AI, Adzuna API",
+    description:
+      "AI-powered job search platform using OpenRouter LLMs (GPT-4o, Llama 3.1) to auto-generate ATS-optimized resume bullets, cover letters, and mock interview Q&A. Built a Resume Studio with PDF/DOCX parsing and ATS scoring, plus an Adzuna API job-matching engine with AI compatibility scoring across 12+ secured MongoDB REST endpoints (Supabase JWT auth, Zod validation, rate-limiting).",
+    github: "https://github.com/Nishant232/HireFlow",
+    live: "https://nishant00-hireflow.hf.space",
+  },
+  {
+    id: 3,
+    title: "SyncScribe",
+    category: "Real-Time Collaboration Tool",
+    techs: "Next.js, TypeScript, Socket.io, Express, Supabase (PostgreSQL)",
+    description:
+      "Real-time collaborative document editor with keystroke-level sync, live cursor tracking, and typing indicators via Socket.io WebSockets, achieving sub-50ms broadcast latency. Implemented PostgreSQL Row-Level Security (Supabase) for owner/editor/viewer access control with expirable share tokens; deployed on Hugging Face Spaces.",
+    github: "https://github.com/Nishant232/SyncScribe",
+    live: "https://nishant00-syncscribe.hf.space/",
+  },
+  {
+    id: 4,
     title: "Optimal EV Charging Stations",
     category: "ML & Optimization",
     techs: "Python, NumPy, Pandas, Scikit-learn, Flask",
@@ -35,7 +55,7 @@ const projects: Project[] = [
     live: "",
   },
   {
-    id: 3,
+    id: 5,
     title: "ERA-AI Voice Assistant",
     category: "AI & OS Automation",
     techs: "Python, Speech Recognition, OS Automation",
@@ -45,7 +65,7 @@ const projects: Project[] = [
     live: "",
   },
   {
-    id: 4,
+    id: 6,
     title: "Message Spam Detection",
     category: "NLP & Deep Learning",
     techs: "Python, TensorFlow, Scikit-learn, Hugging Face",
@@ -55,7 +75,7 @@ const projects: Project[] = [
     live: "",
   },
   {
-    id: 5,
+    id: 7,
     title: "Face Attendance Detection",
     category: "Computer Vision",
     techs: "Python, OpenCV, NumPy, Flask, MongoDB",

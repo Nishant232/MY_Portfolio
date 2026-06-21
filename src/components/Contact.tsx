@@ -10,16 +10,16 @@ const Contact = () => {
           <div className="contact-box">
             <h4>Email</h4>
             <p>
-              <a href="mailto:nishant75971@mail.com" data-cursor="disable">
-                nishant75971@mail.com
+              <a href="mailto:nishant75971@gmail.com" data-cursor="disable">
+                nishant75971@gmail.com
               </a>
             </p>
-            <h4>Phone</h4>
+            {/* <h4>Phone</h4>
             <p>
               <a href="tel:+917827177597" data-cursor="disable">
                 +91 78271 77597
               </a>
-            </p>
+            </p> */}
           </div>
           <div className="contact-box">
             <h4>Social</h4>
@@ -61,7 +61,7 @@ const Contact = () => {
               FullStack Developer <br /> by <span>Nishant</span>
             </h2>
             <h5>
-              <MdCopyright /> 2025
+              <MdCopyright /> 2026
             </h5>
           </div>
         </div>

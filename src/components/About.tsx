@@ -6,9 +6,7 @@ const About = () => {
       <div className="about-me">
         <h3 className="title">About Me</h3>
         <p className="para">
-          Full Stack Developer with hands-on experience shipping real-world applications. 
-          Specializing in React, Node.js, and MongoDB, with a focus on clean code, 
-          scalable architecture, and production-ready solutions.
+         Full Stack Developer (MERN) who ships. Three self-initiated apps live in production, plus a 4-month on-site internship building real-world systems. I work across React, Next.js, Node.js, and PostgreSQL — and I've built everything from Razorpay payment flows to real-time WebSocket collaboration to LLM-powered tooling. I care about clean code and architecture that holds up once people actually use it
         </p>
       </div>
     </div>

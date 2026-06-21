@@ -142,6 +142,10 @@ const WhatIDo = () => {
                 <div className="what-tags">MongoDB</div>
                 <div className="what-tags">Supabase</div>
                 <div className="what-tags">Flask</div>
+                <div className="what-tags">Socket.io</div>
+                <div className="what-tags">Zod</div>
+                <div className="what-tags">Docker</div>
+                <div className="what-tags">GitHub Actions</div>
               </div>
               <div className="what-arrow"></div>
             </div>

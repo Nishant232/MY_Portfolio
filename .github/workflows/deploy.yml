@@ -1,0 +1,51 @@
+name: Deploy to Hugging Face Spaces
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Add HF Space config to dist
+        run: |
+          cat > dist/README.md << 'EOF'
+          ---
+          title: Portfolio
+          emoji: 💼
+          colorFrom: indigo
+          colorTo: blue
+          sdk: static
+          pinned: false
+          ---
+          EOF
+
+      - name: Push to Hugging Face Spaces
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          cd dist
+          git init
+          git config user.email "github-actions@github.com"
+          git config user.name "GitHub Actions"
+          git add .
+          git commit -m "Deploy portfolio"
+          git push --force https://Nishant00:${HF_TOKEN}@huggingface.co/spaces/Nishant00/portfolio main
