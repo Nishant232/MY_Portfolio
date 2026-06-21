@@ -18,18 +18,7 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           if [ -z "$HF_TOKEN" ]; then
-            echo "============================================================"
-            echo "STOP: HF_TOKEN secret is not set in this GitHub repository."
-            echo ""
-            echo "To fix:"
-            echo "  1. Go to https://huggingface.co/settings/tokens"
-            echo "  2. Create a token with WRITE permission"
-            echo "  3. In this GitHub repo go to:"
-            echo "     Settings > Secrets and variables > Actions"
-            echo "  4. Click 'New repository secret'"
-            echo "     Name : HF_TOKEN"
-            echo "     Value: your HuggingFace write token"
-            echo "============================================================"
+            echo "ERROR: HF_TOKEN secret is not set."
             exit 1
           fi
           echo "HF_TOKEN is present."
@@ -46,10 +35,36 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Install huggingface_hub
-        run: pip install huggingface_hub
-
-      - name: Deploy to Hugging Face Spaces
+      - name: Reset HF Space (wipe old git/LFS history)
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python3 .github/scripts/deploy_hf.py
+        run: |
+          pip install huggingface_hub --quiet
+          python3 .github/scripts/deploy_hf.py
+
+      - name: Push dist to HF Space via git-lfs
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          cd dist
+
+          git init
+          git lfs install
+
+          git config user.email "github-actions@github.com"
+          git config user.name "GitHub Actions"
+
+          # Track binary model/shader files as LFS so HF accepts them
+          printf '*.glb filter=lfs diff=lfs merge=lfs -text\n' >  .gitattributes
+          printf '*.hdr filter=lfs diff=lfs merge=lfs -text\n' >> .gitattributes
+          printf '*.wasm filter=lfs diff=lfs merge=lfs -text\n' >> .gitattributes
+
+          git add .
+          git commit -m "Deploy portfolio"
+          git branch -M main
+
+          REMOTE="https://Nishant00:${HF_TOKEN}@huggingface.co/spaces/Nishant00/portfolio"
+
+          # Upload LFS objects first, then push the commit
+          git lfs push --all "$REMOTE"
+          git push --force "$REMOTE" HEAD:main
