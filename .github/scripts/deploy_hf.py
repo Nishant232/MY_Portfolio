@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 """Deploy dist/ to Hugging Face Spaces (Nishant00/portfolio).
 
-Root-cause note: public/models/.gitattributes marks *.glb as Git LFS.
-Vite copies it into dist/, which makes HF reject every commit because it
-sees an LFS pointer with no LFS content. We delete all .gitattributes
-files from dist/ before uploading so HF treats character.glb (1.47 MB)
-as a plain file — well within HF's 10 MB regular-file limit.
+Why delete+recreate?
+  Previous failed runs left an orphaned LFS pointer for models/character.glb
+  in the Space's git history. Any new commit to that Space is rejected until
+  the history is wiped. Deleting and recreating gives a clean slate.
+
+Why remove .gitattributes?
+  public/models/.gitattributes marks *.glb as Git LFS. Vite copies it into
+  dist/, so upload_folder tries to create an LFS pointer for character.glb
+  but never uploads the LFS content → commit rejected again. Removing the
+  file before upload makes HF treat character.glb as a plain 1.47 MB file,
+  which is well within the 10 MB regular-file limit.
 """
 import glob
 import os
 import sys
+import time
 
 try:
     from huggingface_hub import HfApi
@@ -33,32 +40,42 @@ if not token:
     print("=" * 60)
     sys.exit(1)
 
-# Remove every .gitattributes from dist/ so HF never sees the LFS rule
-# for *.glb and uploads character.glb as a plain file instead.
-ga_files = glob.glob("dist/**/.gitattributes", recursive=True) + \
-           glob.glob("dist/.gitattributes")
+# ── Step 0: Strip every .gitattributes from dist/ ───────────────────────────
+ga_files = (glob.glob("dist/**/.gitattributes", recursive=True)
+            + glob.glob("dist/.gitattributes"))
 for f in ga_files:
     os.remove(f)
-    print(f"Removed {f} (prevents false LFS tracking on HF)")
+    print(f"Removed {f}  (no LFS tracking on HF)")
 
 api = HfApi(token=token)
 
-print(f"\n[1/2] Creating Space '{SPACE_ID}' if it does not exist...")
+# ── Step 1: Delete Space to wipe any corrupted LFS git history ───────────────
+print(f"\n[1/3] Clearing old Space '{SPACE_ID}'...")
+try:
+    api.delete_repo(repo_id=SPACE_ID, repo_type="space")
+    print("      Deleted. Waiting for HF to process...")
+    time.sleep(8)
+except Exception:
+    print("      No existing Space found (first deploy).")
+
+# ── Step 2: Create a brand-new static Space ──────────────────────────────────
+print(f"[2/3] Creating fresh static Space...")
 try:
     api.create_repo(
         repo_id=SPACE_ID,
         repo_type="space",
         space_sdk="static",
-        exist_ok=True,
         private=False,
     )
-    print("      Space ready.")
+    print("      Space created.")
+    time.sleep(3)
 except Exception as exc:
     print(f"ERROR creating Space: {exc}")
     print("Make sure your HF_TOKEN has Write permission.")
     sys.exit(1)
 
-print("[2/2] Uploading portfolio files...")
+# ── Step 3: Upload dist/ — all files as plain files, no LFS ─────────────────
+print("[3/3] Uploading portfolio files (plain files, no LFS)...")
 try:
     api.upload_folder(
         folder_path="dist",
