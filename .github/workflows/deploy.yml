@@ -13,6 +13,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check HF_TOKEN secret
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          if [ -z "$HF_TOKEN" ]; then
+            echo "============================================================"
+            echo "STOP: HF_TOKEN secret is not set in this GitHub repository."
+            echo ""
+            echo "To fix:"
+            echo "  1. Go to https://huggingface.co/settings/tokens"
+            echo "  2. Create a token with WRITE permission"
+            echo "  3. In this GitHub repo go to:"
+            echo "     Settings > Secrets and variables > Actions"
+            echo "  4. Click 'New repository secret'"
+            echo "     Name : HF_TOKEN"
+            echo "     Value: your HuggingFace write token"
+            echo "============================================================"
+            exit 1
+          fi
+          echo "HF_TOKEN is present."
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -25,40 +46,10 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Install huggingface_hub
+        run: pip install huggingface_hub
+
       - name: Deploy to Hugging Face Spaces
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          pip install huggingface_hub --quiet
-          python3 << 'PYEOF'
-          import os, sys
-          from huggingface_hub import HfApi
-
-          token = os.environ.get("HF_TOKEN", "")
-          if not token:
-              print("ERROR: HF_TOKEN secret is not set.")
-              print("Go to: GitHub repo > Settings > Secrets and variables > Actions > New repository secret")
-              print("Name: HF_TOKEN  |  Value: your HuggingFace write token")
-              sys.exit(1)
-
-          api = HfApi(token=token)
-
-          print("Step 1/2 — Creating Space if it does not exist...")
-          api.create_repo(
-              repo_id="Nishant00/portfolio",
-              repo_type="space",
-              space_sdk="static",
-              exist_ok=True,
-              private=False,
-          )
-
-          print("Step 2/2 — Uploading build files...")
-          api.upload_folder(
-              folder_path="dist",
-              repo_id="Nishant00/portfolio",
-              repo_type="space",
-          )
-
-          print("")
-          print("Deployed! Live at: https://nishant00-portfolio.hf.space")
-          PYEOF
+        run: python3 .github/scripts/deploy_hf.py
