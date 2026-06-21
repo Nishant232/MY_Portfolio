@@ -81,6 +81,6 @@ except Exception as exc:
 print("", flush=True)
 print("=" * 60, flush=True)
 print("Deployed!", flush=True)
-print(f"  https://nishant00-portfolio.hf.space", flush=True)
+print(f"  https://nishant00-portfolio.static.hf.space", flush=True)
 print(f"  https://huggingface.co/spaces/{SPACE_ID}", flush=True)
 print("=" * 60, flush=True)
