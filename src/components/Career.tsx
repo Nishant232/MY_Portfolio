@@ -21,7 +21,7 @@ const Career = () => {
             </div>
             <p>
               Pursuing B.Tech in Computer Science Engineering with specialization in Artificial
-              Intelligence &amp; Machine Learning. Maintaining a SGPA of 8.05 while building
+              Intelligence &amp; Machine Learning. Maintaining a SGPA of 8.16 while building
               hands-on projects in web development, ML, and systems programming.
             </p>
           </div>
@@ -31,7 +31,7 @@ const Career = () => {
                 <h4>FullStack Developer Intern</h4>
                 <h5>Code Codence</h5>
               </div>
-              <h3>Feb 2026 – Jun 2026</h3>
+              <h3>Feb 2026 – July 2026</h3>
             </div>
             <p>
               Shipped 2 production MERN apps within a 4-developer Agile team using Git feature
