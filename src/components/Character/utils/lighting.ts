@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { gsap } from "gsap";
 
-const setLighting = (scene: THREE.Scene, renderer: THREE.WebGLRenderer) => {
+const setLighting = (scene: THREE.Scene, _renderer: THREE.WebGLRenderer) => {
+  // Simple directional light — animates in when character loads
   const directionalLight = new THREE.DirectionalLight(0xc7a9ff, 0);
   directionalLight.intensity = 0;
   directionalLight.position.set(-0.47, -0.32, -1);
@@ -18,29 +18,22 @@ const setLighting = (scene: THREE.Scene, renderer: THREE.WebGLRenderer) => {
   pointLight.castShadow = true;
   scene.add(pointLight);
 
+  // Ambient and hemisphere lights as the primary environment
   const ambientLight = new THREE.AmbientLight(0xc7a9ff, 0);
   scene.add(ambientLight);
 
-  const hemisphereLight = new THREE.HemisphereLight(0xc7a9ff, 0x444488, 0);
+  const hemisphereLight = new THREE.HemisphereLight(0xd0b0ff, 0x222244, 0);
   hemisphereLight.position.set(0, 20, 0);
   scene.add(hemisphereLight);
 
-  // Use programmatic PMREMGenerator environment — no HDR file needed, never crashes WebGL
-  let envReady = false;
-  try {
-    const pmremGenerator = new THREE.PMREMGenerator(renderer);
-    pmremGenerator.compileEquirectangularShader();
-    const roomEnv = new RoomEnvironment();
-    const envTexture = pmremGenerator.fromScene(roomEnv, 0.04).texture;
-    scene.environment = envTexture;
-    scene.environmentIntensity = 0;
-    scene.environmentRotation.set(5.76, 85.85, 1);
-    roomEnv.dispose();
-    pmremGenerator.dispose();
-    envReady = true;
-  } catch (e) {
-    console.warn("PMREMGenerator failed, using fallback lights only.", e);
-  }
+  // Additional fill lights for character visibility
+  const fillLight = new THREE.DirectionalLight(0x9966ff, 0);
+  fillLight.position.set(1, 5, 3);
+  scene.add(fillLight);
+
+  const rimLight = new THREE.DirectionalLight(0xcc99ff, 0);
+  rimLight.position.set(-2, 3, -2);
+  scene.add(rimLight);
 
   function setPointLight(screenLight: any) {
     if (screenLight && screenLight.material && screenLight.material.opacity > 0.9) {
@@ -54,17 +47,12 @@ const setLighting = (scene: THREE.Scene, renderer: THREE.WebGLRenderer) => {
   const ease = "power2.inOut";
 
   function turnOnLights() {
-    if (envReady) {
-      gsap.to(scene, {
-        environmentIntensity: 0.64,
-        duration: duration,
-        ease: ease,
-      });
-    } else {
-      gsap.to(ambientLight, { intensity: 0.8, duration, ease });
-      gsap.to(hemisphereLight, { intensity: 0.5, duration, ease });
-    }
-    gsap.to(directionalLight, { intensity: 1, duration, ease });
+    // Fade in all lights
+    gsap.to(ambientLight, { intensity: 0.6, duration, ease });
+    gsap.to(hemisphereLight, { intensity: 0.5, duration, ease });
+    gsap.to(directionalLight, { intensity: 1.2, duration, ease });
+    gsap.to(fillLight, { intensity: 0.8, duration, ease });
+    gsap.to(rimLight, { intensity: 0.4, duration, ease });
     gsap.to(".character-rim", {
       y: "55%",
       opacity: 1,
