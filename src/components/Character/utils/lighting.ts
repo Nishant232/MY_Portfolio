@@ -18,17 +18,37 @@ const setLighting = (scene: THREE.Scene) => {
   pointLight.castShadow = true;
   scene.add(pointLight);
 
+  // Fallback ambient lighting in case HDR fails to load
+  const ambientLight = new THREE.AmbientLight(0xc7a9ff, 0);
+  scene.add(ambientLight);
+
+  const hemisphereLight = new THREE.HemisphereLight(0xc7a9ff, 0x444488, 0);
+  hemisphereLight.position.set(0, 20, 0);
+  scene.add(hemisphereLight);
+
+  let hdrLoaded = false;
+
   new RGBELoader()
     .setPath("/models/")
-    .load("char_enviorment.hdr", function (texture) {
-      texture.mapping = THREE.EquirectangularReflectionMapping;
-      scene.environment = texture;
-      scene.environmentIntensity = 0;
-      scene.environmentRotation.set(5.76, 85.85, 1);
-    });
+    .load(
+      "char_enviorment.hdr",
+      function (texture) {
+        hdrLoaded = true;
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        scene.environment = texture;
+        scene.environmentIntensity = 0;
+        scene.environmentRotation.set(5.76, 85.85, 1);
+      },
+      undefined,
+      function (error) {
+        // HDR failed to load (corrupted/missing) – fallback to ambient lighting
+        console.warn("HDR environment map failed to load, using fallback lighting.", error);
+        hdrLoaded = false;
+      }
+    );
 
   function setPointLight(screenLight: any) {
-    if (screenLight.material.opacity > 0.9) {
+    if (screenLight && screenLight.material && screenLight.material.opacity > 0.9) {
       pointLight.intensity = screenLight.material.emissiveIntensity * 20;
     } else {
       pointLight.intensity = 0;
@@ -37,11 +57,25 @@ const setLighting = (scene: THREE.Scene) => {
   const duration = 2;
   const ease = "power2.inOut";
   function turnOnLights() {
-    gsap.to(scene, {
-      environmentIntensity: 0.64,
-      duration: duration,
-      ease: ease,
-    });
+    if (hdrLoaded) {
+      gsap.to(scene, {
+        environmentIntensity: 0.64,
+        duration: duration,
+        ease: ease,
+      });
+    } else {
+      // Fallback: animate ambient and hemisphere lights instead
+      gsap.to(ambientLight, {
+        intensity: 0.8,
+        duration: duration,
+        ease: ease,
+      });
+      gsap.to(hemisphereLight, {
+        intensity: 0.5,
+        duration: duration,
+        ease: ease,
+      });
+    }
     gsap.to(directionalLight, {
       intensity: 1,
       duration: duration,

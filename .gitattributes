@@ -1,0 +1,25 @@
+# Ensure consistent line endings for text files
+* text=auto
+
+# Explicitly mark binary files as binary (prevents CRLF corruption)
+*.hdr binary
+*.enc binary
+*.glb binary
+*.gltf binary
+*.bin binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.mp4 binary
+*.webm binary
+*.ogg binary
+*.mp3 binary
+*.wav binary
+*.draco binary
