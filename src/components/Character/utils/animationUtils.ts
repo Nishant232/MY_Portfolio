@@ -51,7 +51,7 @@ const setAnimations = (gltf: GLTF) => {
     }
   }
 
-  function hover(gltf: GLTF, hoverDiv: HTMLDivElement) {
+  function hover(_gltf: GLTF, hoverDiv: HTMLDivElement) {
     if (!hoverDiv) return;
     const onHoverFace = () => {
       if (walkClip) {
