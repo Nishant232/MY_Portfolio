@@ -72,8 +72,14 @@ const Scene = () => {
             let character = gltf.scene;
             setChar(character);
             scene.add(character);
-            headBone = character.getObjectByName("spine006") || null;
-            screenLight = character.getObjectByName("screenlight") || null;
+            headBone =
+                character.getObjectByName("spine006") ||
+                character.getObjectByName("mixamorigHead") ||
+                character.getObjectByName("Head") ||
+                character.getObjectByName("head") ||
+                character.getObjectByName("Spine3") ||
+                null;
+              screenLight = character.getObjectByName("screenlight") || null;
             progress.loaded().then(() => {
               setTimeout(() => {
                 light.turnOnLights();
