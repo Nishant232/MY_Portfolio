@@ -14,47 +14,67 @@ const setCharacter = (
   loader.setDRACOLoader(dracoLoader);
 
   const loadCharacter = () => {
-    return new Promise<GLTF | null>(async (resolve, reject) => {
+    return new Promise<GLTF>((resolve, reject) => {
+      let blobUrl: string | null = null;
+
+      const fail = (error: unknown) => {
+        if (blobUrl) URL.revokeObjectURL(blobUrl);
+        dracoLoader.dispose();
+        reject(error instanceof Error ? error : new Error(String(error)));
+      };
+
+      void (async () => {
       try {
         const encryptedBlob = await decryptFile(
           "/models/character.enc",
           "Character3D#@"
         );
-        const blobUrl = URL.createObjectURL(new Blob([encryptedBlob]));
+          blobUrl = URL.createObjectURL(new Blob([encryptedBlob]));
 
         let character: THREE.Object3D;
         loader.load(
           blobUrl,
           async (gltf) => {
-            character = gltf.scene;
-            await renderer.compileAsync(character, camera, scene);
-            character.traverse((child: any) => {
-              if (child.isMesh) {
-                const mesh = child as THREE.Mesh;
-                child.castShadow = true;
-                child.receiveShadow = true;
-                mesh.frustumCulled = true;
+              try {
+                character = gltf.scene;
+                await renderer.compileAsync(character, camera, scene);
+                character.traverse((child: THREE.Object3D) => {
+                  if ((child as THREE.Mesh).isMesh) {
+                    const mesh = child as THREE.Mesh;
+                    mesh.castShadow = true;
+                    mesh.receiveShadow = true;
+                    mesh.frustumCulled = true;
+                  }
+                });
+                resolve(gltf);
+                try {
+                  setCharTimeline(character, camera);
+                } catch (error) {
+                  console.warn("Character timeline unavailable:", error);
+                }
+                try {
+                  setAllTimeline();
+                } catch (error) {
+                  console.warn("Scroll timeline unavailable:", error);
+                }
+                const footR = character.getObjectByName("footR");
+                const footL = character.getObjectByName("footL");
+                if (footR) footR.position.y = 3.36;
+                if (footL) footL.position.y = 3.36;
+                if (blobUrl) URL.revokeObjectURL(blobUrl);
+                blobUrl = null;
+                dracoLoader.dispose();
+              } catch (error) {
+                fail(error);
               }
-            });
-            resolve(gltf);
-            try { setCharTimeline(character, camera); } catch (e) { /* model-specific timeline */ }
-            try { setAllTimeline(); } catch (e) { /* scroll timeline */ }
-            const footR = character!.getObjectByName("footR");
-            const footL = character!.getObjectByName("footL");
-            if (footR) footR.position.y = 3.36;
-            if (footL) footL.position.y = 3.36;
-            dracoLoader.dispose();
           },
           undefined,
-          (error) => {
-            console.error("Error loading GLTF model:", error);
-            reject(error);
-          }
+            fail
         );
       } catch (err) {
-        reject(err);
-        console.error(err);
+          fail(err);
       }
+      })();
     });
   };
 

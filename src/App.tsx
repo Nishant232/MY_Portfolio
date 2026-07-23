@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import "./App.css";
+import CharacterErrorBoundary from "./components/Character/CharacterErrorBoundary";
 
 const CharacterModel = lazy(() => import("./components/Character"));
 const MainContainer = lazy(() => import("./components/MainContainer"));
@@ -9,11 +10,15 @@ const App = () => {
   return (
     <>
       <LoadingProvider>
-        <Suspense>
+        <Suspense fallback={<div className="app-loading-fallback" />}>
           <MainContainer>
-            <Suspense>
-              <CharacterModel />
-            </Suspense>
+            <CharacterErrorBoundary>
+              <Suspense
+                fallback={<div className="character-fallback" aria-hidden="true" />}
+              >
+                <CharacterModel />
+              </Suspense>
+            </CharacterErrorBoundary>
           </MainContainer>
         </Suspense>
       </LoadingProvider>

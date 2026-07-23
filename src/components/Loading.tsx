@@ -10,28 +10,55 @@ const Loading = ({ percent }: { percent: number }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [clicked, setClicked] = useState(false);
 
-  if (percent >= 100) {
-    setTimeout(() => {
+  useEffect(() => {
+    if (percent < 100 || loaded) return;
+
+    let revealTimer: number | undefined;
+    const completeTimer = window.setTimeout(() => {
       setLoaded(true);
-      setTimeout(() => {
+      revealTimer = window.setTimeout(() => {
         setIsLoaded(true);
       }, 1000);
     }, 600);
-  }
+
+    return () => {
+      window.clearTimeout(completeTimer);
+      if (revealTimer) window.clearTimeout(revealTimer);
+    };
+  }, [loaded, percent]);
 
   useEffect(() => {
-    import("./utils/initialFX").then((module) => {
-      if (isLoaded) {
-        setClicked(true);
-        setTimeout(() => {
-          if (module.initialFX) {
-            module.initialFX();
+    if (!isLoaded) return;
+
+    let active = true;
+    let exitTimer: number | undefined;
+    setClicked(true);
+
+    import("./utils/initialFX")
+      .then((module) => {
+        exitTimer = window.setTimeout(() => {
+          if (!active) return;
+          try {
+            if (module.initialFX) {
+              module.initialFX();
+            }
+          } catch (error) {
+            console.error("Intro animation failed:", error);
+          } finally {
+            setIsLoading(false);
           }
-          setIsLoading(false);
         }, 900);
-      }
-    });
-  }, [isLoaded]);
+      })
+      .catch((error) => {
+        console.error("Could not load intro animation:", error);
+        if (active) setIsLoading(false);
+      });
+
+    return () => {
+      active = false;
+      if (exitTimer) window.clearTimeout(exitTimer);
+    };
+  }, [isLoaded, setIsLoading]);
 
   function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
     const { currentTarget: target } = e;

@@ -1,6 +1,34 @@
 .section-container {
   width: 1300px;
 }
+.app-loading-fallback {
+  position: fixed;
+  inset: 0;
+  background: #0b080c;
+}
+.character-fallback {
+  position: fixed;
+  left: 50%;
+  bottom: 8vh;
+  width: min(34vw, 420px);
+  aspect-ratio: 0.72;
+  transform: translateX(-50%);
+  border-radius: 48% 48% 42% 42%;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(234, 229, 236, 0.16) 0 12%, transparent 13%),
+    radial-gradient(ellipse at 50% 75%, rgba(194, 164, 255, 0.16) 0 34%, transparent 35%);
+  filter: drop-shadow(0 0 70px rgba(168, 124, 255, 0.45));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.character-model-failed .character-fallback,
+.character-container > .character-fallback {
+  opacity: 1;
+}
+.character-model-failed canvas {
+  opacity: 0;
+}
 .title,
 .para {
   font-kerning: none;
