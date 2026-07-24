@@ -1,65 +1,48 @@
-# My Portfolio Website - Overview 🚀
+# Nishant - Full-Stack Developer Portfolio
 
-This repository contains the open-source version of my personal portfolio website.  
-Feel free to explore the code and use it for learning and inspiration.
+A fast, responsive portfolio focused on production work, engineering outcomes,
+and recruiter-friendly project case studies.
 
----
+## Featured projects
 
-## ⚠️ Usage Notice
+- GrowthHub - mentorship marketplace with booking and Razorpay payments
+- HireFlow - AI-assisted job search and resume workspace
+- SyncScribe - real-time collaborative document editor
 
-This project is shared for learning purposes only.
+Each featured project includes a live product link, source repository, concise
+technical summary, and an optimized preview image.
 
-Please do NOT:
-- Clone or replicate the full website or design
-- Repost it with minor content changes
-- Use this project for commercial/client work
-- Create tutorials or content using this exact project
+## Technology
 
-If you use parts of the code, you must provide proper credit linking back to the original repository.
+- React
+- TypeScript
+- Vite
+- CSS
+- React Icons
 
-Build your own version — don’t just copy.
+The portfolio intentionally avoids blocking loaders, WebGL, and heavy animation
+libraries so its content remains accessible and reliable across devices.
 
-— nishant
+## Local development
 
----
+```bash
+npm install
+npm run dev
+```
 
-## 🛠️ Instructions
+Create a production build with:
 
-I have modified the GSAP Club plugins using trial versions.  
-⚠️ Note: Trial plugins cannot be used for production or hosting.
+```bash
+npm run build
+```
 
-For official GSAP Club plugins, refer here:  
-https://gsap.com/docs/v3/Installation/
+## Contact
 
----
+- [Portfolio](https://nishant00-portfolio.hf.space/)
+- [GitHub](https://github.com/Nishant232)
+- [LinkedIn](https://www.linkedin.com/in/2005nishant/)
+- [Email](mailto:nishant75971@gmail.com)
 
-## ⚙️ Tech Stack
+## License
 
-React • TypeScript • GSAP • Three.js • WebGL • HTML • CSS • JavaScript
-
----
-
-## 🎨 Assets Usage
-
-Some 3D assets included in this repository are free to use for learning purposes.
-
-However:
-
-- The original 3D avatar used on my live portfolio is NOT included in this repository
-- That avatar is a custom asset created over ~1 month
-- It is not open source and not available for reuse
-
-Any usage, extraction, or redistribution of that avatar from my live website is strictly prohibited.
-
----
-
-![Protfolio-Preview](https://github.com/user-attachments/assets/3c4557e7-6392-4928-b8a9-7b2476ef4edd)
-
----
-
-## 📄 License
-
-This project is licensed under the Personal Portfolio License (PPL) v1.0.
-
-See the LICENSE file for full details
-
+See [LICENSE](LICENSE).

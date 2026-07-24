@@ -13,6 +13,9 @@ const featuredProjects = [
     number: "01",
     title: "GrowthHub",
     type: "Mentorship marketplace",
+    image: "/images/projects/growthhub.png",
+    imageAlt:
+      "GrowthHub homepage showing its mentor marketplace and career acceleration message",
     summary:
       "A production platform for booking 1-on-1 sessions with industry experts, complete with Razorpay payments and real-time availability.",
     impact: ["Live payments", "Production deployment", "PostgreSQL architecture"],
@@ -25,6 +28,9 @@ const featuredProjects = [
     number: "02",
     title: "HireFlow",
     type: "AI job-search workspace",
+    image: "/images/projects/hireflow.png",
+    imageAlt:
+      "HireFlow homepage showing its AI job search dashboard and application pipeline",
     summary:
       "An AI-powered career platform that creates ATS-ready content, scores resumes and matches candidates with relevant roles.",
     impact: ["12+ secured APIs", "AI compatibility scoring", "PDF/DOCX parsing"],
@@ -37,6 +43,9 @@ const featuredProjects = [
     number: "03",
     title: "SyncScribe",
     type: "Real-time collaboration",
+    image: "/images/projects/syncscribe.png",
+    imageAlt:
+      "SyncScribe homepage showing its real-time collaborative document editor",
     summary:
       "A collaborative editor with keystroke-level synchronization, live cursors and role-based document sharing.",
     impact: ["Sub-50ms broadcast", "Row-level security", "Expirable share links"],
@@ -93,13 +102,15 @@ function App() {
       <a className="skip-link" href="#main">Skip to content</a>
 
       <header className="topbar">
-        <a className="brand" href="#top" aria-label="Nishant, home">N<span>.</span></a>
+        <a className="brand" href="#top" aria-label="Nishant, home">
+          Nishant<span>.</span>
+        </a>
         <nav aria-label="Primary navigation">
           <a href="#work">Work</a>
           <a href="#experience">Experience</a>
           <a href="#about">About</a>
         </nav>
-        <a className="nav-cta" href="mailto:n6624036@gmail.com">
+        <a className="nav-cta" href="mailto:nishant75971@gmail.com">
           Let&apos;s talk <MdArrowOutward />
         </a>
       </header>
@@ -133,7 +144,13 @@ function App() {
           </div>
 
           <aside className="hero-panel" aria-label="Profile highlights">
-            <div className="profile-mark" aria-hidden="true"><span>N</span></div>
+            <div className="profile-mark">
+              <img
+                src="/images/nishant-profile.jpg"
+                alt="Nishant, full-stack developer"
+                decoding="async"
+              />
+            </div>
             <div className="panel-copy">
               <p>Full-stack developer</p>
               <h2>React × Node × AI</h2>
@@ -169,24 +186,41 @@ function App() {
           <div className="project-grid">
             {featuredProjects.map((project) => (
               <article className={`project-card project-${project.tone}`} key={project.title}>
-                <div className="project-topline">
-                  <span>{project.number}</span><span>{project.type}</span>
-                </div>
-                <h3>{project.title}</h3>
-                <p className="project-summary">{project.summary}</p>
-                <ul className="impact-list">
-                  {project.impact.map((item) => <li key={item}>{item}</li>)}
-                </ul>
-                <div className="tag-list">
-                  {project.stack.map((item) => <span key={item}>{item}</span>)}
-                </div>
-                <div className="project-links">
-                  <a href={project.live} target="_blank" rel="noreferrer">
-                    Live product <MdArrowOutward />
-                  </a>
-                  <a href={project.code} target="_blank" rel="noreferrer">
-                    <FaGithub /> Source
-                  </a>
+                <a
+                  className="project-visual"
+                  href={project.live}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Open the live ${project.title} project`}
+                >
+                  <img
+                    src={project.image}
+                    alt={project.imageAlt}
+                    loading={project.number === "01" ? "eager" : "lazy"}
+                    decoding="async"
+                  />
+                  <span>View live product <MdArrowOutward /></span>
+                </a>
+                <div className="project-content">
+                  <div className="project-topline">
+                    <span>{project.number}</span><span>{project.type}</span>
+                  </div>
+                  <h3>{project.title}</h3>
+                  <p className="project-summary">{project.summary}</p>
+                  <ul className="impact-list">
+                    {project.impact.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                  <div className="tag-list">
+                    {project.stack.map((item) => <span key={item}>{item}</span>)}
+                  </div>
+                  <div className="project-links">
+                    <a href={project.live} target="_blank" rel="noreferrer">
+                      Live product <MdArrowOutward />
+                    </a>
+                    <a href={project.code} target="_blank" rel="noreferrer">
+                      <FaGithub /> Source
+                    </a>
+                  </div>
                 </div>
               </article>
             ))}
@@ -213,7 +247,7 @@ function App() {
             <article className="timeline-item">
               <div className="timeline-date">Feb—Jul 2026</div>
               <div>
-                <p className="role-label">Code Codence · On-site</p>
+                <p className="role-label">Code Codence Private Limited · On-site</p>
                 <h3>Full-Stack Developer Intern</h3>
                 <p>
                   Shipped two MERN applications in a four-developer Agile team.
@@ -266,8 +300,8 @@ function App() {
         <section className="section contact-section" id="contact">
           <p className="kicker">Start a conversation</p>
           <h2>Have a role where I can build, learn and ship?</h2>
-          <a className="contact-email" href="mailto:n6624036@gmail.com">
-            <MdMailOutline /> n6624036@gmail.com
+          <a className="contact-email" href="mailto:nishant75971@gmail.com">
+            <MdMailOutline /> nishant75971@gmail.com
           </a>
           <div className="contact-links">
             <a href="https://github.com/Nishant232" target="_blank" rel="noreferrer"><FaGithub /> GitHub</a>
